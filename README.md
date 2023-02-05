@@ -2,6 +2,8 @@
 
 Rich editor with Tiptap, Tailwind CSS, Headless UI, and Vue3 as frontend, combined with Go as backend to store image.
 
+![example](/images/example.png)
+
 Feature list :
 - History (Undo, Redo)
 - Heading (1,2,3)
