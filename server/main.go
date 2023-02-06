@@ -32,9 +32,6 @@ func setupRouter() *gin.Engine {
 	r.Use(cors.Default())
 
 	r.GET("/files", func(c *gin.Context) {
-		//c.Header("Access-Control-Allow-Origin", "*")
-		//c.Header("Access-Control-Allow-Methods", "GET, POST")
-
 		createDirectoryIfNotExist()
 
 		var imageList []image
@@ -55,9 +52,6 @@ func setupRouter() *gin.Engine {
 	})
 
 	r.POST("/files", func(c *gin.Context) {
-		//c.Header("Access-Control-Allow-Origin", "*")
-		//c.Header("Access-Control-Allow-Methods", "GET, POST")
-
 		createDirectoryIfNotExist()
 
 		file, err := c.FormFile("file")
@@ -85,9 +79,6 @@ func setupRouter() *gin.Engine {
 	})
 
 	r.GET("/files/:file", func(c *gin.Context) {
-		//c.Header("Access-Control-Allow-Origin", "*")
-		//c.Header("Access-Control-Allow-Methods", "GET, POST")
-		//
 		name := c.Param("file")
 
 		createDirectoryIfNotExist()
@@ -110,22 +101,8 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	r := setupRouter()
-	//r.Use(cors.New(cors.Config{
-	//	AllowMethods:    []string{"GET", "POST"},
-	//	AllowAllOrigins: true,
-	//}))
 	err := r.Run(":8080")
 	if err != nil {
 		return
 	}
-
-	//// Read files folder
-	//files, err := ioutil.ReadDir("files")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//for _, file := range files {
-	//	fmt.Println(file.Name())
-	//}
-
 }
