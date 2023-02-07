@@ -1,5 +1,10 @@
 <template>
   <Dialog title="Pilih Gambar" :show="show" @close="closeDialog">
+    <div
+      class="rounded-lg border border-red-300 bg-red-100 p-5 text-sm text-gray-700"
+    >
+      Upload feature on this site has been disabled
+    </div>
     <div v-bind="getRootProps()" class="rounded-lg border border-gray-300 p-4">
       <input v-bind="getInputProps()" />
       <div
@@ -45,7 +50,6 @@
 import { onMounted, ref } from "vue"
 import { useDropzone } from "vue3-dropzone"
 import Dialog from "./Dialog.vue"
-import axios from "axios"
 import type ImageData from "@/models/image"
 
 defineProps<{
@@ -63,7 +67,20 @@ const { getRootProps, getInputProps, isDragActive } = useDropzone({
   noClick: true,
 })
 
-const imageListRef = ref<ImageData[]>([])
+const imageListRef = ref<ImageData[]>([
+  {
+    Name: "System76-Fractal_Mountains-by_Kate_Hazen_of_System76.png",
+    Url: "/uploaded/System76-Fractal_Mountains-by_Kate_Hazen_of_System76.png",
+  },
+  {
+    Name: "System76-Geometric-adapted_by_Kate_Hazen_of_System76.png",
+    Url: "/uploaded/System76-Geometric-adapted_by_Kate_Hazen_of_System76.png",
+  },
+  {
+    Name: "System76-Robot-by_Kate_Hazen_of_System76.png",
+    Url: "/uploaded/System76-Robot-by_Kate_Hazen_of_System76.png",
+  },
+])
 
 function closeDialog() {
   emit("close")
@@ -74,24 +91,11 @@ function onDropImage(acceptedFiles: any[]) {
     return
   }
 
-  const formData = new FormData()
-  formData.append("file", acceptedFiles[0])
-
-  axios
-    .post("http://localhost:8080/files", formData, {
-      headers: {
-        "Content-type": "multipart/form-data",
-      },
-    })
-    .then(() => {
-      loadData()
-    })
+  // Removed
 }
 
 function loadData() {
-  axios.get("http://localhost:8080/files").then((result) => {
-    imageListRef.value = result.data
-  })
+  // Removed
 }
 
 function insertImage(url: string) {
