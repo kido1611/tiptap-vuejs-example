@@ -369,7 +369,7 @@ const showAddImageDialog = ref<boolean>(false)
 
 const editorInstance = useEditor({
   content:
-    '<h1>Hello world</h1><p>asd asdqwe asdqwe</p><table><tbody><tr><th colspan="1" rowspan="1"><p></p></th><th colspan="1" rowspan="1"><p></p></th><th colspan="1" rowspan="1"><p></p></th></tr><tr><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td></tr><tr><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td></tr></tbody></table>',
+    '<h1>Hello world</h1><p>Halo</p><img src="/uploaded/System76-Fractal_Mountains-by_Kate_Hazen_of_System76.png"><p>asd asdqwe asdqwe</p><table><tbody><tr><th colspan="1" rowspan="1"><p></p></th><th colspan="1" rowspan="1"><p></p></th><th colspan="1" rowspan="1"><p></p></th></tr><tr><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td></tr><tr><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td></tr></tbody></table>',
   editorProps: {
     attributes: {
       class: "blog",
