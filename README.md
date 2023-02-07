@@ -16,6 +16,9 @@ Feature list :
 - Youtube
 - Horizontal line
 
+## Preview
+[https://kido1611-tiptap-vuejs-example.vercel.app/](https://kido1611-tiptap-vuejs-example.vercel.app/)
+
 ## Running Frontend
 ```shell
 npm install
