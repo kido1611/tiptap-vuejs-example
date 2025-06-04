@@ -306,9 +306,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue"
-import { EditorContent, useEditor } from "@tiptap/vue-3"
-import type DataTable from "@/models/table"
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import { EditorContent, useEditor } from "@tiptap/vue-3";
+import type DataTable from "./../models/table";
 import {
   IconArrowBackUp,
   IconArrowForwardUp,
@@ -326,46 +326,46 @@ import {
   IconStrikethrough,
   IconUnderline,
   IconMinus,
-} from "@tabler/icons-vue"
-import TiptapToolbarButton from "@/components/TiptapToolbarButton.vue"
-import TiptapToolbarGroup from "@/components/TiptapToolbarGroup.vue"
-import Paragraph from "@tiptap/extension-paragraph"
-import Document from "@tiptap/extension-document"
-import Text from "@tiptap/extension-text"
-import History from "@tiptap/extension-history"
-import Heading from "@tiptap/extension-heading"
-import Bold from "@tiptap/extension-bold"
-import Italic from "@tiptap/extension-italic"
-import Underline from "@tiptap/extension-underline"
-import Strike from "@tiptap/extension-strike"
-import ListItem from "@tiptap/extension-list-item"
-import BulletList from "@tiptap/extension-bullet-list"
-import OrderedList from "@tiptap/extension-ordered-list"
-import Link from "@tiptap/extension-link"
-import { Blockquote } from "@tiptap/extension-blockquote"
-import { HardBreak } from "@tiptap/extension-hard-break"
-import { CharacterCount } from "@tiptap/extension-character-count"
-import { Youtube } from "@tiptap/extension-youtube"
-import Dropcursor from "@tiptap/extension-dropcursor"
-import { HorizontalRule } from "@tiptap/extension-horizontal-rule"
-import { Table } from "@tiptap/extension-table"
-import { TableHeader } from "@tiptap/extension-table-header"
-import { TableRow } from "@tiptap/extension-table-row"
-import { TableCell } from "@tiptap/extension-table-cell"
-import Gapcursor from "@tiptap/extension-gapcursor"
-import Image from "@tiptap/extension-image"
+} from "@tabler/icons-vue";
+import TiptapToolbarButton from "./TiptapToolbarButton.vue";
+import TiptapToolbarGroup from "./TiptapToolbarGroup.vue";
+import Paragraph from "@tiptap/extension-paragraph";
+import Document from "@tiptap/extension-document";
+import Text from "@tiptap/extension-text";
+import History from "@tiptap/extension-history";
+import Heading from "@tiptap/extension-heading";
+import Bold from "@tiptap/extension-bold";
+import Italic from "@tiptap/extension-italic";
+import Underline from "@tiptap/extension-underline";
+import Strike from "@tiptap/extension-strike";
+import ListItem from "@tiptap/extension-list-item";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import Link from "@tiptap/extension-link";
+import { Blockquote } from "@tiptap/extension-blockquote";
+import { HardBreak } from "@tiptap/extension-hard-break";
+import { CharacterCount } from "@tiptap/extension-character-count";
+import { Youtube } from "@tiptap/extension-youtube";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
+import { Table } from "@tiptap/extension-table";
+import { TableHeader } from "@tiptap/extension-table-header";
+import { TableRow } from "@tiptap/extension-table-row";
+import { TableCell } from "@tiptap/extension-table-cell";
+import Gapcursor from "@tiptap/extension-gapcursor";
+import Image from "@tiptap/extension-image";
 
-import TiptapLinkDialog from "@/components/TiptapLinkDialog.vue"
-import TiptapVideoDialog from "@/components/TiptapVideoDialog.vue"
-import TiptapTableDialog from "@/components/TiptapTableDialog.vue"
-import TiptapImageDialog from "@/components/TiptapImageDialog.vue"
+import TiptapLinkDialog from "./TiptapLinkDialog.vue";
+import TiptapVideoDialog from "./TiptapVideoDialog.vue";
+import TiptapTableDialog from "./TiptapTableDialog.vue";
+import TiptapImageDialog from "./TiptapImageDialog.vue";
 
-const contentResult = ref<string>()
-const currentLinkInDialog = ref<string | undefined>()
-const showLinkDialog = ref<boolean>()
-const showAddYoutubeDialog = ref<boolean>(false)
-const showAddTableDialog = ref<boolean>(false)
-const showAddImageDialog = ref<boolean>(false)
+const contentResult = ref<string>();
+const currentLinkInDialog = ref<string | undefined>();
+const showLinkDialog = ref<boolean>();
+const showAddYoutubeDialog = ref<boolean>(false);
+const showAddTableDialog = ref<boolean>(false);
+const showAddImageDialog = ref<boolean>(false);
 
 const editorInstance = useEditor({
   content:
@@ -413,14 +413,14 @@ const editorInstance = useEditor({
     Image,
   ],
   onUpdate: ({ editor }) => {
-    contentResult.value = editor.getHTML()
+    contentResult.value = editor.getHTML();
   },
-})
+});
 
 function openLinkDialog() {
-  currentLinkInDialog.value = editorInstance.value?.getAttributes("link").href
+  currentLinkInDialog.value = editorInstance.value?.getAttributes("link").href;
 
-  showLinkDialog.value = true
+  showLinkDialog.value = true;
 }
 
 function updateLink(value?: string) {
@@ -430,8 +430,8 @@ function updateLink(value?: string) {
       .focus()
       .extendMarkRange("link")
       .unsetLink()
-      .run()
-    return
+      .run();
+    return;
   }
 
   editorInstance.value
@@ -439,11 +439,11 @@ function updateLink(value?: string) {
     .focus()
     .extendMarkRange("link")
     .setLink({ href: value })
-    .run()
+    .run();
 }
 
 function insertImage(url: string) {
-  editorInstance.value?.chain().focus().setImage({ src: url }).run()
+  editorInstance.value?.chain().focus().setImage({ src: url }).run();
 }
 
 function insertYoutubeVideo(url: string) {
@@ -451,7 +451,7 @@ function insertYoutubeVideo(url: string) {
     src: url,
     width: 400,
     height: 300,
-  })
+  });
 }
 
 function insertTable(table: DataTable) {
@@ -463,13 +463,16 @@ function insertTable(table: DataTable) {
       cols: table.columns,
       withHeaderRow: table.withHeader,
     })
-    .run()
+    .run();
 }
 onMounted(() => {
-  setTimeout(() => (contentResult.value = editorInstance.value?.getHTML()), 250)
-})
+  setTimeout(
+    () => (contentResult.value = editorInstance.value?.getHTML()),
+    250,
+  );
+});
 
 onBeforeUnmount(() => {
-  editorInstance.value?.destroy()
-})
+  editorInstance.value?.destroy();
+});
 </script>

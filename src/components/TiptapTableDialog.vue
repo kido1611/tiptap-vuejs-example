@@ -31,7 +31,7 @@
             <Switch
               v-model="inputWithHeaderRef"
               :class="inputWithHeaderRef ? 'bg-blue-600' : 'bg-gray-200'"
-              class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               <span
                 :class="inputWithHeaderRef ? 'translate-x-6' : 'translate-x-1'"
@@ -64,29 +64,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import Dialog from "./Dialog.vue"
-import type Table from "@/models/table"
-import InputContainer from "./InputContainer.vue"
-import Label from "./Label.vue"
-import Input from "./Input.vue"
-import { Switch, SwitchLabel, SwitchGroup } from "@headlessui/vue"
+import { ref } from "vue";
+import Dialog from "./Dialog.vue";
+import type Table from "./..//models/table";
+import InputContainer from "./InputContainer.vue";
+import Label from "./Label.vue";
+import Input from "./Input.vue";
+import { Switch, SwitchLabel, SwitchGroup } from "@headlessui/vue";
 
 defineProps<{
-  show: boolean
-}>()
+  show: boolean;
+}>();
 
 const emit = defineEmits<{
-  (e: "close"): void
-  (e: "insert", table: Table): void
-}>()
+  (e: "close"): void;
+  (e: "insert", table: Table): void;
+}>();
 
-const inputColumnsRef = ref<number>(3)
-const inputRowsRef = ref<number>(3)
-const inputWithHeaderRef = ref<boolean>(true)
+const inputColumnsRef = ref<number>(3);
+const inputRowsRef = ref<number>(3);
+const inputWithHeaderRef = ref<boolean>(true);
 
 function closeDialog() {
-  emit("close")
+  emit("close");
 }
 
 function onSubmit() {
@@ -94,7 +94,7 @@ function onSubmit() {
     rows: inputRowsRef.value,
     columns: inputColumnsRef.value,
     withHeader: inputWithHeaderRef.value,
-  })
-  closeDialog()
+  });
+  closeDialog();
 }
 </script>
