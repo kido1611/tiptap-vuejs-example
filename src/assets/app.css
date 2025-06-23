@@ -3,7 +3,7 @@ layer(base);
 
 @import "tailwindcss";
 
-@plugin '@headlessui/tailwindcss';
+@plugin "@tailwindcss/typography";
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -13,85 +13,105 @@ layer(base);
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
+/* @layer base { */
+/*   *, */
+/*   ::after, */
+/*   ::before, */
+/*   ::backdrop, */
+/*   ::file-selector-button { */
+/*     border-color: var(--color-gray-200, currentcolor); */
+/*   } */
+/* } */
+
+@theme {
+  --font-inter: "Inter", sans-serif;
 }
 
-.font-inter {
-  font-family: "Inter", sans-serif;
+.tiptap-prose {
+  @apply prose max-w-none prose-neutral;
+
+  /* Fix table th, tiptap (prosemirrors) does not support thead */
+  th > p,
+  td > p {
+    @apply my-0;
+  }
+  @apply prose-th:px-2 prose-th:pb-2;
+  @apply prose-th:first:pl-0 prose-th:last:pr-0;
+
+  & > p:first-child {
+    @apply mt-0;
+  }
+
+  & > p:last-child {
+    @apply mb-0;
+  }
 }
 
 .ProseMirror {
   @apply focus:outline-0! px-4 py-4 min-h-[150px] relative;
 }
 
-.blog {
-  @apply flex flex-col space-y-4;
-}
-
-.blog h1 {
-  @apply text-4xl;
-}
-.blog h2 {
-  @apply text-3xl;
-}
-
-.blog h3 {
-  @apply text-2xl;
-}
-
-.blog ol,
-.blog ul {
-  @apply ml-8 list-outside mt-2!;
-}
-
-.blog ol {
-  @apply list-decimal;
-}
-.blog ul {
-  @apply list-disc;
-}
-
-.blog ol li,
-.blog ul li {
-  @apply mt-2 first:mt-0;
-}
-
-.blog blockquote {
-  @apply italic border-l-4 border-gray-300 p-4 py-2 ml-6 mt-6! mb-2!;
-}
-
-.blog a {
-  @apply hover:underline text-blue-800 cursor-pointer;
-}
-
-.blog hr {
-  @apply border-gray-400;
-}
-
-.blog table {
-  @apply border border-gray-400 table-fixed border-collapse w-full;
-}
-
-.blog table th,
-.blog table td {
-  @apply border border-gray-400 py-1 px-2 relative;
-}
-
-.blog table th {
-  @apply bg-blue-100;
-}
-
-.blog .tableWrapper {
-  @apply overflow-auto;
-}
-
+/* .blog { */
+/*   @apply flex flex-col space-y-4; */
+/* } */
+/**/
+/* .blog h1 { */
+/*   @apply text-4xl; */
+/* } */
+/* .blog h2 { */
+/*   @apply text-3xl; */
+/* } */
+/**/
+/* .blog h3 { */
+/*   @apply text-2xl; */
+/* } */
+/**/
+/* .blog ol, */
+/* .blog ul { */
+/*   @apply ml-8 list-outside mt-2!; */
+/* } */
+/**/
+/* .blog ol { */
+/*   @apply list-decimal; */
+/* } */
+/* .blog ul { */
+/*   @apply list-disc; */
+/* } */
+/**/
+/* .blog ol li, */
+/* .blog ul li { */
+/*   @apply mt-2 first:mt-0; */
+/* } */
+/**/
+/* .blog blockquote { */
+/*   @apply italic border-l-4 border-gray-300 p-4 py-2 ml-6 mt-6! mb-2!; */
+/* } */
+/**/
+/* .blog a { */
+/*   @apply hover:underline text-blue-800 cursor-pointer; */
+/* } */
+/**/
+/* .blog hr { */
+/*   @apply border-gray-400; */
+/* } */
+/**/
+/* .blog table { */
+/*   @apply border border-gray-400 table-fixed border-collapse w-full; */
+/* } */
+/**/
+/* .blog table th, */
+/* .blog table td { */
+/*   @apply border border-gray-400 py-1 px-2 relative; */
+/* } */
+/**/
+/* .blog table th { */
+/*   @apply bg-blue-100; */
+/* } */
+/**/
+/* .prose .tableWrapper { */
+/*   @apply overflow-auto; */
+/* } */
+/**/
 .ProseMirror iframe {
   @apply w-full! h-auto! max-w-[480px] min-h-[320px] aspect-video! mr-6;
 }
@@ -134,4 +154,3 @@ layer(base);
 .ProseMirror-focused .ProseMirror-gapcursor {
   @apply block;
 }
-
