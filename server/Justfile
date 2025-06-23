@@ -1,0 +1,115 @@
+set shell := ["sh", "-c"]
+set dotenv-load
+
+DATABASE_URL := "${DATABASE_DRIVER}://${DATABASE_HOST}"
+
+[doc('Show this help message')]
+help:
+  @just --list
+
+[doc('Generate database repository')]
+generate: check_tool_sqlc
+  @rm -rf internal/db/sqlc/
+  @sqlc generate
+
+[doc('Run app')]
+run name:
+  @go run cmd/{{name}}/main.go
+
+[doc('Build app')]
+build name:
+  @go build -o bin/{{name}} cmd/{{name}}/main.go
+
+[doc("Live reload application on development")]
+watch name: check_tool_air
+  @air --build.cmd "go build -o bin/{{name}} cmd/{{name}}/main.go" --build.bin "./bin/{{name}}"
+
+[doc("Tidy, verify, and vendor dependencies")]
+@vendor:
+  echo "Tidying and verifying dependencies..."  
+  go mod tidy
+  go mod verify
+  echo "Vendoring dependencies"
+  go mod vendor
+
+[doc("Format code, vet, static check, and runs tests")]
+@audit: check_tool_staticcheck
+  echo "Formatting code..."
+  go fmt ./...
+  echo "Vetting code..."
+  go vet ./...
+  staticcheck ./...
+  echo "Running test..."
+  go test ./...
+
+[group('make')]
+[group('migration')]
+[doc('Create database migration')]
+make-migration name: check_tool_migrate
+  @echo "Create database migration"
+  @migrate create -ext sql -dir internal/db/migrations {{name}}
+
+[group('migration')]
+[doc("Running database migrations")]
+migrate-up: check_tool_migrate
+  @echo "Running migrations..."
+  @migrate -database {{DATABASE_URL}} -path internal/db/migrations up
+
+[group('migration')]
+[doc("Rollback migrations")]
+migrate-down: check_tool_migrate
+  @echo "Running migrations..."
+  @migrate -database {{DATABASE_URL}} -path internal/db/migrations down
+
+[group('migration')]
+[doc("Recreate database")]
+[confirm("Are you sure want to drop this? [y/N]")]
+migrate-fresh: check_tool_migrate && migrate-up
+  @echo "Dropping database..."
+  @migrate -database {{DATABASE_URL}} -path internal/db/migrations drop -f
+
+[group('test')]
+[doc("Integration testing using Hurl")]
+test-hurl: check_tool_hurl
+  @echo "Test using Hurl"
+  @hurl tests/hurl/ --no-output
+
+[private]
+check_tool_hurl:
+  @just check_tool hurl
+
+[private]
+check_tool_sqlc:
+  @just check_tool sqlc github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+[private]
+check_tool_migrate: 
+  @just check_tool migrate github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+[private]
+check_tool_air: 
+  @just check_tool air github.com/air-verse/air@latest
+
+[private]
+check_tool_staticcheck: 
+  @just check_tool staticcheck honnef.co/go/tools/cmd/staticcheck@latest
+
+[private]
+check_tool name url="":
+  @if ! which {{ name }} &> /dev/null; then \
+    echo "{{ BOLD }}{{ name }}{{ NORMAL }} is not installed."; \
+    if [ "{{url}}" == "" ]; then exit 1; fi; \
+    just install {{ name }} {{ url }}; \
+  fi 
+
+[private]
+[confirm('Do you want to install it? [y/N]')]
+install name url:
+  @echo "{{ BOLD }}Installing {{ name }}{{ NORMAL }}"
+  @if [ "{{name}}" == "migrate" ]; then \
+    go install -tags "${DATABASE_DRIVER}" {{url}}; \
+  else \
+    go install {{url}}; \
+  fi
+
+alias migrate := migrate-up

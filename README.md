@@ -2,7 +2,7 @@
 
 Rich editor with [Tiptap](https://tiptap.dev), Tailwind CSS, Headless UI, and Vue 3 as frontend, combined with Go as backend to store images.
 
-> Now the editor can be used in any components (can be bind using v-model, [check App.vue](https://github.com/kido1611/tiptap-vuejs-example/blob/main/src/App.vue#L19)).
+> Now the editor can be used in any components (use v-model, [check App.vue](https://github.com/kido1611/tiptap-vuejs-example/blob/main/src/App.vue#L19)).
 
 ![example](/images/example.png)
 
@@ -36,7 +36,7 @@ npm run dev
 ```shell
 cd server
 go get
-go run main.go
+go run cmd/api/main.go
 ```
 
 ## Icon
