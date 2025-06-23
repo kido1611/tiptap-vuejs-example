@@ -1,105 +1,133 @@
+<script setup lang="ts">
+import { onMounted, ref, useTemplateRef } from "vue";
+import { useDropZone } from "@vueuse/core";
+import Dialog from "./TheDialog.vue";
+import type { Image as ImageData } from "./../types";
+
+const serverUrl = import.meta.env.VITE_IMAGE_SERVER_URL;
+const isPreview = import.meta.env.VITE_DEPLOY_PREVIEW as boolean;
+
+const emit = defineEmits<{
+  insert: [url: string];
+}>();
+
+const open = defineModel("open", {
+  default: false,
+});
+
+const dropZoneRef = useTemplateRef<HTMLElement>("dropZoneRef");
+const { isOverDropZone } = useDropZone(dropZoneRef, {
+  dataTypes: ["image/jpeg", "image/jpg", "image/png"],
+  onDrop: onDropImage,
+});
+
+const imageListRef = ref<ImageData[]>([]);
+
+async function onDropImage(files: File[] | null) {
+  if (!files || files.length === 0) {
+    return;
+  }
+
+  await Promise.all(
+    files.map((file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      return fetch(`${serverUrl}/files`, {
+        method: "POST",
+        body: formData,
+      });
+    }),
+  );
+
+  await loadData();
+}
+
+async function loadData() {
+  const response = await fetch(`${serverUrl}/files`, {
+    method: "GET",
+  });
+  imageListRef.value = await response.json();
+}
+
+function insertImage(url: string) {
+  emit("insert", url);
+  open.value = false;
+}
+
+onMounted(async () => {
+  if (!isPreview) {
+    await loadData();
+  } else {
+    imageListRef.value.push({
+      name: "System76-Fractal_Mountains-by_Kate_Hazen_of_System76.png",
+      url: "/examples/System76-Fractal_Mountains-by_Kate_Hazen_of_System76.png",
+    });
+
+    imageListRef.value.push({
+      name: "System76-Geometric-adapted_by_Kate_Hazen_of_System76.png",
+      url: "/examples/System76-Geometric-adapted_by_Kate_Hazen_of_System76.png",
+    });
+
+    imageListRef.value.push({
+      name: "System76-Robot-by_Kate_Hazen_of_System76.png",
+      url: "/examples/System76-Robot-by_Kate_Hazen_of_System76.png",
+    });
+
+    imageListRef.value.push({
+      name: "System76-Unleash_Your_Robot_Blue-by_Kate_Hazen_of_System76.png",
+      url: "/examples/System76-Unleash_Your_Robot_Blue-by_Kate_Hazen_of_System76.png",
+    });
+
+    imageListRef.value.push({
+      name: "System76-Unleash_Your_Robot-by_Kate_Hazen_of_System76.png",
+      url: "/examples/System76-Unleash_Your_Robot-by_Kate_Hazen_of_System76.png",
+    });
+  }
+});
+</script>
+
 <template>
-  <Dialog title="Pilih Gambar" :show="show" @close="closeDialog">
-    <div v-bind="getRootProps()" class="rounded-lg border border-gray-300 p-4">
-      <input v-bind="getInputProps()" />
+  <Dialog title="Pilih Gambar" v-model:open="open">
+    <div class="px-5 py-4">
       <div
-        v-if="imageListRef?.length > 0"
-        class="grid grid-cols-3 gap-3 sm:grid-cols-4"
+        v-if="imageListRef && imageListRef.length > 0"
+        class="grid grid-cols-5 gap-2 mb-4"
       >
         <button
-          @click="insertImage(image.Url)"
+          @click="insertImage(image.url)"
           type="button"
-          v-for="image in imageListRef"
-          :key="image.Name"
-          class="rounded-md border border-gray-300 p-1"
+          v-for="(image, key) in imageListRef"
+          :key="image.name"
+          class="rounded-md border border-gray-300 p-1 hover:bg-neutral-200"
         >
           <img
-            alt=""
-            :src="image.Url"
-            class="aspect-square object-scale-down object-center"
+            :alt="`Photo ${key}`"
+            :src="image.url"
+            class="aspect-square object-contain object-center"
           />
         </button>
       </div>
+
       <div
-        :class="[
-          isDragActive ? 'bg-gray-100' : '',
-          imageListRef?.length > 0 ? 'mt-4 ' : '',
-        ]"
-        class="rounded-lg border border-dashed border-gray-300 px-8 py-12"
+        ref="dropZoneRef"
+        v-if="!isPreview"
+        class="h-32 flex items-center justify-center border border-dashed border-neutral-300 rounded-lg p-4"
       >
-        <p
-          v-if="isDragActive"
-          class="text-center text-sm font-medium text-gray-700"
-        >
-          Drop the files here ...
+        <p v-if="!isOverDropZone" class="text-sm text-neutral-700">
+          Drop images here
         </p>
-        <p v-else class="text-center text-sm font-medium text-gray-700">
-          Drag 'n' drop some image file here, or click to select file
+        <p v-else class="text-sm text-neutral-700 font-semibold">Drop here</p>
+      </div>
+
+      <div
+        v-else
+        class="h-32 flex items-center justify-center border border-dashed border-red-300 rounded-lg p-4 bg-red-100"
+      >
+        <p class="text-sm text-red-700 font-medium">
+          Upload image is disabled on this preview site
         </p>
       </div>
     </div>
   </Dialog>
 </template>
-
-<script setup lang="ts">
-import { onMounted, ref } from "vue"
-import { useDropzone } from "vue3-dropzone"
-import Dialog from "./Dialog.vue"
-import axios from "axios"
-import type ImageData from "@/models/image"
-
-defineProps<{
-  show: boolean
-}>()
-const emit = defineEmits<{
-  (e: "close"): void
-  (e: "insert", url: string): void
-}>()
-
-const { getRootProps, getInputProps, isDragActive } = useDropzone({
-  accept: "image/png,image/jpeg",
-  multiple: false,
-  onDrop: onDropImage,
-  noClick: true,
-})
-
-const imageListRef = ref<ImageData[]>([])
-
-function closeDialog() {
-  emit("close")
-}
-
-function onDropImage(acceptedFiles: any[]) {
-  if (acceptedFiles.length === 0) {
-    return
-  }
-
-  const formData = new FormData()
-  formData.append("file", acceptedFiles[0])
-
-  axios
-    .post("http://localhost:8080/files", formData, {
-      headers: {
-        "Content-type": "multipart/form-data",
-      },
-    })
-    .then(() => {
-      loadData()
-    })
-}
-
-function loadData() {
-  axios.get("http://localhost:8080/files").then((result) => {
-    imageListRef.value = result.data
-  })
-}
-
-function insertImage(url: string) {
-  emit("insert", url)
-  closeDialog()
-}
-
-onMounted(() => {
-  loadData()
-})
-</script>

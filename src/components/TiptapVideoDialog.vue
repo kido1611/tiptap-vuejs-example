@@ -1,7 +1,7 @@
 <template>
-  <Dialog title="Tambah Video Youtube" :show="show" @close="closeDialog">
+  <Dialog title="Tambah Video Youtube" v-model:open="open">
     <form @submit.prevent="onSubmit">
-      <div class="flex flex-col space-y-5">
+      <div class="flex flex-col space-y-5 px-5 py-4">
         <InputContainer>
           <Label for="input-add-youtube-url">Tautan Youtube</Label>
           <Input
@@ -12,13 +12,6 @@
           />
         </InputContainer>
         <div class="flex flex-row justify-end space-x-3">
-          <button
-            type="button"
-            class="rounded-md px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-100"
-            @click="closeDialog"
-          >
-            Batal
-          </button>
           <button
             type="submit"
             class="rounded-md bg-blue-700 px-4 py-3 text-sm font-medium text-white hover:bg-opacity-80"
@@ -32,27 +25,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import Dialog from "./Dialog.vue"
-import InputContainer from "./InputContainer.vue"
-import Input from "./Input.vue"
-import Label from "./Label.vue"
+import { ref } from "vue";
+import Dialog from "./TheDialog.vue";
+import InputContainer from "./InputContainer.vue";
+import Input from "./Input.vue";
+import Label from "./Label.vue";
 
-defineProps<{
-  show: boolean
-}>()
+const emit = defineEmits<{
+  insert: [value: string];
+}>();
 
-const emit = defineEmits(["close", "insert"])
+const open = defineModel<boolean>("open", {
+  default: false,
+});
 
-const inputYoutubeUrlRef = ref<string>("")
-
-function closeDialog() {
-  emit("close")
-}
+const inputYoutubeUrlRef = ref<string>("");
 
 function onSubmit() {
-  emit("insert", inputYoutubeUrlRef.value)
-  inputYoutubeUrlRef.value = ""
-  closeDialog()
+  emit("insert", inputYoutubeUrlRef.value);
+  inputYoutubeUrlRef.value = "";
+
+  open.value = false;
 }
 </script>

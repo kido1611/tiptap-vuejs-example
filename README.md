@@ -1,10 +1,11 @@
 # Tiptap Example
 
-Rich editor with Tiptap, Tailwind CSS, Headless UI, and Vue3 as frontend, combined with Go as backend to store image.
+Rich editor with [Tiptap](https://tiptap.dev), Tailwind CSS, Headless UI, and Vue 3 as frontend, combined with Go as backend to store images.
 
 ![example](/images/example.png)
 
-Feature list :
+## Feature list
+
 - History (Undo, Redo)
 - Heading (1,2,3)
 - Text style (Bold, Italic, Underline, Strikethrough)
@@ -13,19 +14,23 @@ Feature list :
 - Image (+ example with Go as server)
 - Blockquote
 - Table (Delete table, add column, delete column, add row, delete row, merge or split cell)
-- Youtube
+- Youtube Video
 - Horizontal line
 
 ## Preview
+
 [https://kido1611-tiptap-vuejs-example.vercel.app/](https://kido1611-tiptap-vuejs-example.vercel.app/)
 
 ## Running Frontend
+
 ```shell
+cp .env.example .env
 npm install
 npm run dev
 ```
 
 ## Running Backend
+
 ```shell
 cd server
 go get
@@ -33,5 +38,6 @@ go run main.go
 ```
 
 ## Icon
+
 - [Tabler Icon](https://tabler-icons.io/)
 - [Material Design Icon](https://materialdesignicons.com/)

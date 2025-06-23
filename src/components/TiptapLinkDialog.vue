@@ -1,20 +1,13 @@
 <template>
-  <Dialog title="Tautan" :show="show" @close="closeDialog">
+  <Dialog v-model:open="open" title="Tautan">
     <form @submit.prevent="update">
-      <div class="flex flex-col space-y-5">
+      <div class="flex flex-col space-y-5 px-5 py-4">
         <InputContainer>
           <Label for="input-link-url">Tautan</Label>
           <Input type="url" id="input-link-url" v-model="inputLinkRef" />
         </InputContainer>
 
         <div class="flex flex-row justify-end space-x-3">
-          <button
-            type="button"
-            class="rounded-md px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-100"
-            @click="closeDialog"
-          >
-            Batal
-          </button>
           <button
             type="submit"
             class="rounded-md bg-blue-700 px-4 py-3 text-sm font-medium text-white hover:bg-opacity-80"
@@ -28,26 +21,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import Dialog from "./Dialog.vue"
-import Label from "./Label.vue"
-import Input from "./Input.vue"
-import InputContainer from "./InputContainer.vue"
+import { ref } from "vue";
+import Dialog from "./TheDialog.vue";
+import Label from "./Label.vue";
+import Input from "./Input.vue";
+import InputContainer from "./InputContainer.vue";
 
-const props = defineProps<{ show: boolean; currentUrl?: string }>()
-const emit = defineEmits(["close", "update"])
-const inputLinkRef = ref<string>()
+const open = defineModel<boolean>("open", {
+  default: false,
+});
 
-function closeDialog() {
-  emit("close")
-}
+const emit = defineEmits<{
+  update: [value: string];
+}>();
+
+defineExpose({
+  setLink,
+});
+const inputLinkRef = ref<string>("");
 
 function update() {
-  emit("update", inputLinkRef.value)
-  emit("close")
+  open.value = false;
+  emit("update", inputLinkRef.value);
 }
 
-onMounted(() => {
-  inputLinkRef.value = props.currentUrl ?? ""
-})
+function setLink(url: string) {
+  inputLinkRef.value = url;
+}
 </script>
