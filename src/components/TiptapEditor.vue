@@ -306,14 +306,14 @@ function useTiptapImage() {
       </TiptapToolbarGroup>
       <TiptapToolbarGroup>
         <TiptapToolbarButton
-          label="Bold"
+          label="Unordered List"
           :is-active="editorInstance?.isActive('bulletList')"
           @click="editorInstance?.chain().focus().toggleBulletList().run()"
         >
           <IconListDetails class="h-5 w-5" />
         </TiptapToolbarButton>
         <TiptapToolbarButton
-          label="Bold"
+          label="Ordered List"
           :is-active="editorInstance?.isActive('orderedList')"
           @click="editorInstance?.chain().focus().toggleOrderedList().run()"
         >
