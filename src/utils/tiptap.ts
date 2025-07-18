@@ -1,27 +1,29 @@
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
-import History from "@tiptap/extension-history";
+import { BulletList, OrderedList, ListItem } from "@tiptap/extension-list";
+import {
+  UndoRedo,
+  Dropcursor,
+  Gapcursor,
+  CharacterCount,
+} from "@tiptap/extensions";
 import Heading from "@tiptap/extension-heading";
 import Bold from "@tiptap/extension-bold";
 import Italic from "@tiptap/extension-italic";
 import Underline from "@tiptap/extension-underline";
 import Strike from "@tiptap/extension-strike";
-import ListItem from "@tiptap/extension-list-item";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
 import Link from "@tiptap/extension-link";
 import { Blockquote } from "@tiptap/extension-blockquote";
 import { HardBreak } from "@tiptap/extension-hard-break";
-import { CharacterCount } from "@tiptap/extension-character-count";
 import { Youtube } from "@tiptap/extension-youtube";
-import Dropcursor from "@tiptap/extension-dropcursor";
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
-import { Table } from "@tiptap/extension-table";
-import { TableHeader } from "@tiptap/extension-table-header";
-import { TableRow } from "@tiptap/extension-table-row";
-import { TableCell } from "@tiptap/extension-table-cell";
-import Gapcursor from "@tiptap/extension-gapcursor";
+import {
+  Table,
+  TableRow,
+  TableCell,
+  TableHeader,
+} from "@tiptap/extension-table";
 import Image from "@tiptap/extension-image";
 import Code from "@tiptap/extension-code";
 import CodeBlock from "@tiptap/extension-code-block";
@@ -43,7 +45,7 @@ export const tiptapExtensions = (options?: Partial<TiptapExtensionOptions>) => {
     Paragraph,
     Document,
     Text,
-    History,
+    UndoRedo,
     Heading.configure({
       levels: tiptapExtension.heading.level,
     }),
